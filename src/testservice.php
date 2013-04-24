@@ -33,6 +33,6 @@ echo "Time used 10000-times: ".$b." (". $b/10000 ." each)\n";
 
 
 $server = new \SectorNord\ZMQ\Rpc\Server();
-$server->setZMQSocket("ipc://2kservice");
+$server->setZMQSocket("ipc:///tmp/2kservice");
 $server->setService(new TestService());
 $server->start();

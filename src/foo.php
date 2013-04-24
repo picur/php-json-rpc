@@ -5,7 +5,7 @@ $loader = new \JustAddicted\Loader\Loader();
 $loader->registerNamespace("SectorNord", __DIR__."/SectorNord");
 $loader->registerLoader();
 
-$client = new \SectorNord\ZMQ\Rpc\Client("ipc://2kservice");
+$client = new \SectorNord\ZMQ\Rpc\Client("ipc:///tmp/2kservice");
 
 $a = microtime(true);
 

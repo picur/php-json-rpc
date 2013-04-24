@@ -53,23 +53,50 @@ class Server
                 $args = $object['params'];
                 $id = $object['id'];
 
-                $response = array('jsonrpc' => '2.0', 'id' => $id);
-
-                try {
-                    if (!method_exists($this->service, $method)) throw new \Exception("Method does not exist", 404);
-                    $response['result'] = call_user_func_array(array($this->service, $method), $args);
-                    $zmq->send(json_encode($response));
-
-                } catch (\Exception $e) {
-                    $response['result'] = array('message' => $e->getMessage(), 'code' => $e->getCode());
-                    $zmq->send(json_encode($response));
-                }
+                $response = $this->handleRequest($id, $method, $args);
+                $zmq->send(json_encode($response));
 
             } catch (\Exception $e) {
 
             }
         }
 
+    }
+
+    /**
+     * @param $id
+     * @param $method
+     * @param $args
+     *
+     * @return array
+     * @throws \Exception
+     */
+    protected function handleRequest($id, $method, $args)
+    {
+        $response = array('jsonrpc' => '2.0', 'id' => $id);
+
+        try {
+            $response = $this->dispatchMethod($method, $args, $response);
+
+        } catch (\Exception $e) {
+            $response['result'] = array('message' => $e->getMessage(), 'code' => $e->getCode());
+        }
+        return $response;
+    }
+
+    /**
+     * @param $method
+     * @param $args
+     * @param $response
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    protected function dispatchMethod($method, $args, $response)
+    {
+        if (!method_exists($this->service, $method)) throw new \Exception("Method does not exist", 404);
+        $response['result'] = call_user_func_array(array($this->service, $method), $args);
+        return $response;
     }
 
 }
