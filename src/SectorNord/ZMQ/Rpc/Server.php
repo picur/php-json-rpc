@@ -44,26 +44,20 @@ class Server
         $zmq = new \ZMQSocket($context, \ZMQ::SOCKET_REP);
         $zmq->bind($this->socket);
         while (true) {
-            usleep(10000);
             try {
 
-                $message = '' . $zmq->recv(\ZMQ::MODE_NOBLOCK);
-
-                if (empty($message)) {
-                    continue;
-                }
-
+                $message = '' . $zmq->recv();
                 $object = json_decode($message, true);
 
                 $method = $object['method'];
                 $args = $object['params'];
                 $id = $object['id'];
 
-                echo "Received RPC-Call for $method => $method \n";
                 $response = array('jsonrpc' => '2.0', 'id' => $id);
 
                 try {
-                    $response['result'] = json_encode(call_user_func_array(array($this->service, $method), $args));
+                    if (!method_exists($this->service, $method)) throw new \Exception("Method does not exist", 404);
+                    $response['result'] = call_user_func_array(array($this->service, $method), $args);
                     $zmq->send(json_encode($response));
 
                 } catch (\Exception $e) {

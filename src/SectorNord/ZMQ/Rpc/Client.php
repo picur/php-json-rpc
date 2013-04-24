@@ -17,18 +17,11 @@ class Client
     protected $socket;
 
     /**
-     * @var string
-     */
-    protected $endpoint;
-
-    /**
      * @param string $socket
-     * @param string $endpoint
      */
-    function __construct($socket, $endpoint)
+    function __construct($socket)
     {
         $this->socket = $socket;
-        $this->endpoint = $endpoint;
     }
 
     /**
@@ -39,16 +32,6 @@ class Client
     public function setZMQSocket($socket)
     {
         $this->socket = $socket;
-    }
-
-    /**
-     * @param $endpoint
-     *
-     * @return void
-     */
-    public function setEndpoint($endpoint)
-    {
-        $this->endpoint = $endpoint;
     }
 
     function __call($name, $arguments)
@@ -72,7 +55,7 @@ class Client
             throw new RpcException($result['exception']['message'],$result['exception']['code']);
         }
 
-        return json_decode($result['result'], true);
+        return $result['result'];
     }
 
 }

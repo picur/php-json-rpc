@@ -1,23 +1,29 @@
 <?php
 require_once "Loader.php";
 
-class Test {
-    public function run($test) {
-        return "TEST ".$test;
-    }
-}
-
 $loader = new \JustAddicted\Loader\Loader();
 $loader->registerNamespace("SectorNord", __DIR__."/SectorNord");
 $loader->registerLoader();
 
-$client = new \SectorNord\ZMQ\Rpc\Client("tcp://localhost:8888","default");
+$client = new \SectorNord\ZMQ\Rpc\Client("ipc://2kservice");
 
-$value = $client->run("ggg");
-echo $value."\n";
+$a = microtime(true);
 
+$data = $client->big();
 
-echo $client->calc(4,3);
+$b = microtime(true) - $a;
 
+echo "Time used 1-time: ".$b. "\n";
+
+$a = microtime(true);
+
+for ($i = 0; $i < 10000; $i++){
+    $data = $client->big();
+
+}
+
+$b = microtime(true) - $a;
+
+echo "Time used 10000-times: ".$b." (". $b/10000 ." each)\n";
 
 echo "\n";
