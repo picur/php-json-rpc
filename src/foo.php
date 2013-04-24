@@ -15,3 +15,9 @@ $client = new \SectorNord\ZMQ\Rpc\Client("tcp://localhost:8888","default");
 
 $value = $client->run("ggg");
 echo $value."\n";
+
+
+echo $client->calc(4,3);
+
+
+echo "\n";

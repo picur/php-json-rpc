@@ -58,20 +58,21 @@ class Client
         $zmq->connect($this->socket);
 
         $message = array(
-            'endpoint' => $this->endpoint,
+            'jsonrpc' => '2.0',
             'method' => $name,
-            'args' => $arguments
+            'params' => $arguments,
+            'id' => round(microtime(true)*100000)
         );
 
         /** @var \ZMQSocket $resultSocket  */
         $zmq->send(json_encode($message));
         $result = json_decode($zmq->recv(),true);
 
-        if (isset($result['exception'])) {
+        if (isset($result['error'])) {
             throw new RpcException($result['exception']['message'],$result['exception']['code']);
         }
 
-        return json_decode($result['response'], true);
+        return json_decode($result['result'], true);
     }
 
 }

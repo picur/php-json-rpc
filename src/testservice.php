@@ -5,6 +5,10 @@ class TestService {
     public function run($test) {
         return "TEST ".$test;
     }
+    public function calc($a,$b)
+    {
+        return $a*$b;
+    }
 }
 
 $loader = new \JustAddicted\Loader\Loader();
@@ -13,5 +17,5 @@ $loader->registerLoader();
 
 $server = new \SectorNord\ZMQ\Rpc\Server();
 $server->setZMQSocket("tcp://0.0.0.0:8888");
-$server->addService("default", new TestService());
+$server->setService(new TestService());
 $server->start();

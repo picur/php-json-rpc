@@ -10,24 +10,19 @@ class Server
     protected $socket;
 
     /**
-     * @var array
+     * @var mixed
      */
-    protected $endpoints = array();
+    protected $service;
 
     /**
-     * @param string $endpoint
      * @param mixed  $class
      *
      * @throws EndpointAlreadyBoundException
      * @return Server
      */
-    public function addService($endpoint, $class)
+    public function setService($class)
     {
-        if (isset($this->endpoints[$endpoint])) {
-            throw new EndpointAlreadyBoundException();
-        }
-        $this->endpoints[$endpoint] = $class;
-        return $this;
+        $this->service = $class;
     }
 
     /**
@@ -60,22 +55,20 @@ class Server
 
                 $object = json_decode($message, true);
 
-                $endpoint = $object['endpoint'];
                 $method = $object['method'];
-                $args = $object['args'];
+                $args = $object['params'];
+                $id = $object['id'];
 
-                echo "Received RPC-Call for: $endpoint => $method \n";
+                echo "Received RPC-Call for $method => $method \n";
+                $response = array('jsonrpc' => '2.0', 'id' => $id);
+
                 try {
-                    $start = microtime(true);
-                    $resultdata = call_user_func_array(array($this->endpoints[$endpoint], $method), $args);
-                    $result = array('response' => json_encode($resultdata), 'executiontime' => microtime(true)-$start);
-                    $resultString = json_encode($result);
-                    $zmq->send($resultString);
-
+                    $response['result'] = json_encode(call_user_func_array(array($this->service, $method), $args));
+                    $zmq->send(json_encode($response));
 
                 } catch (\Exception $e) {
-                    $result = array('exception' => array('message' => $e->getMessage(), 'code' => $e->getCode()));
-                    $zmq->send(json_encode($result));
+                    $response['result'] = array('message' => $e->getMessage(), 'code' => $e->getCode());
+                    $zmq->send(json_encode($response));
                 }
 
             } catch (\Exception $e) {
