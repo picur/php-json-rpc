@@ -79,7 +79,7 @@ class Server
             $response = $this->dispatchMethod($method, $args, $response);
 
         } catch (\Exception $e) {
-            $response['result'] = array('message' => $e->getMessage(), 'code' => $e->getCode());
+            $response['error'] = array('message' => $e->getMessage(), 'code' => $e->getCode());
         }
         return $response;
     }

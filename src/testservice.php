@@ -19,20 +19,6 @@ $loader = new \JustAddicted\Loader\Loader();
 $loader->registerNamespace("SectorNord", __DIR__."/SectorNord");
 $loader->registerLoader();
 
-$client = new TestService();
-$a = microtime(true);
-
-for ($i = 0; $i < 10000; $i++){
-    $data = json_encode($client->big());
-
-}
-
-$b = microtime(true) - $a;
-
-echo "Time used 10000-times: ".$b." (". $b/10000 ." each)\n";
-
-
-$server = new \SectorNord\ZMQ\Rpc\Server();
-$server->setZMQSocket("ipc:///tmp/2kservice");
-$server->setService(new TestService());
-$server->start();
+//$server = new \SectorNord\Transport\ActiveMQ\Server("tcp://localhost", "test", new TestService());
+$server = new \SectorNord\Transport\ZMQ\Server("tcp://0.0.0.0:8888", new TestService());
+$server->listen();
