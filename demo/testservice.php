@@ -20,5 +20,5 @@ $loader->registerNamespace("SectorNord", __DIR__."/SectorNord");
 $loader->registerLoader();
 
 //$server = new \SectorNord\Transport\ActiveMQ\Server("tcp://localhost", "test", new TestService());
-$server = new \SectorNord\Transport\ZMQ\Server("tcp://0.0.0.0:8888", new TestService());
+$server = new \SectorNord\Transport\ZMQ\Server("ipc:///tmp/foobar", new TestService());
 $server->listen();

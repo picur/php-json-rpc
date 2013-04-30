@@ -52,7 +52,9 @@ class RequestDispacher
         if (!method_exists($this->objectToDispatch, $method)) {
             throw new \Exception("Method does not exist", 404);
         }
+
         return call_user_func_array(array($this->objectToDispatch, $method), $args);
+
     }
 
 }

@@ -51,6 +51,12 @@ abstract class Client {
         return $result['result'];
     }
 
+    public function __actAs($interfaceName)
+    {
+        $reflection = new \ReflectionClass($this);
+
+    }
+
     abstract protected function sendMessage($message);
     abstract protected function awaitResponse();
 
