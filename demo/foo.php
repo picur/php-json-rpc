@@ -2,10 +2,10 @@
 require_once "Loader.php";
 
 $loader = new \JustAddicted\Loader\Loader();
-$loader->registerNamespace("SectorNord", __DIR__ . "/SectorNord");
+$loader->registerNamespace("SectorNord", __DIR__ . "/../src/SectorNord");
 $loader->registerLoader();
 
-$client2 = new \SectorNord\Transport\ZMQ\Client("tcp://172.20.2.74:8080");
+$client2 = new \SectorNord\Transport\ZMQ\Client("tcp://10.10.10.40:8080");
 
 $a = microtime(true);
 //$session = $client2->getSessionFor("_USA");
