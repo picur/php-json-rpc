@@ -35,6 +35,7 @@ abstract class Server {
 
                 $message = $this->receiveMessage();
                 $object = Request::fromString($message);
+                echo time()." - ".$object->getMethod()."\n";
                 $dispatcher = new RequestDispacher($object, $this->service);
                 $response = $dispatcher->getResponse();
                 $this->postMessage($response->__toString());

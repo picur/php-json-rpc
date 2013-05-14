@@ -9,7 +9,7 @@ $client2 = new \SectorNord\Transport\ZMQ\Client("tcp://10.10.10.40:8080");
 
 $a = microtime(true);
 
-$c = $client2->getObject("00C1");
+$c = $client2->getObject("00DF");
 
 $b = microtime(true) - $a;
 
