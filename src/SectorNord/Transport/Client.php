@@ -45,7 +45,7 @@ abstract class Client {
         $result = $this->awaitResponse();
 
         if (isset($result['error'])) {
-            throw new \Exception($result['exception']['message'],$result['exception']['code']);
+            throw new \Exception($result['error']['message'],$result['error']['code']);
         }
 
         return $result['result'];

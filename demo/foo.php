@@ -8,15 +8,12 @@ $loader->registerLoader();
 $client2 = new \SectorNord\Transport\ZMQ\Client("tcp://10.10.10.40:8080");
 
 $a = microtime(true);
-//$session = $client2->getSessionFor("_USA");
-//
-//$client2->_setHeader(array("session" => $session));
 
-$c = $client2->getObjects("sv_host");
-
-//print_r($c);
+$c = $client2->getObject("00C1");
 
 $b = microtime(true) - $a;
+
+print_r($c);
 
 echo "Time used: " . $b * 1000 . " ms\n";
 
