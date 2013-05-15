@@ -5,11 +5,11 @@ $loader = new \JustAddicted\Loader\Loader();
 $loader->registerNamespace("SectorNord", __DIR__ . "/../src/SectorNord");
 $loader->registerLoader();
 
-$client2 = new \SectorNord\Transport\ZMQ\Client("tcp://10.10.10.40:8080");
+$client2 = new \SectorNord\Transport\ZMQ\Client("tcp://10.10.10.40:13372");
 
 $a = microtime(true);
 
-$c = $client2->getObject("00DF");
+$c = $client2->getObjects("sv_host");
 
 $b = microtime(true) - $a;
 
